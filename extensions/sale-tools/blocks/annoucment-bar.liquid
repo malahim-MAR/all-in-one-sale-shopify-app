@@ -1,0 +1,24 @@
+{{ 'sale-tools.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'sale-tools.js' | asset_url }}" defer></script>
+
+{%- assign cfg = app.metafields['$app'].settings.value -%}
+
+{% if cfg.announcementText != blank %}
+  <div class="aios-bar" style="background: {{ block.settings.bg }}; color: {{ block.settings.color }};">
+    <span>{{ cfg.announcementText | escape }}</span>
+    {% if cfg.linkUrl != blank %}
+      <a class="aios-bar__link" href="{{ cfg.linkUrl | escape }}">{{ cfg.linkText | default: 'Shop now' | escape }}</a>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "target": "body",
+  "settings": [
+    { "type": "color", "id": "bg", "label": "Background", "default": "#111111" },
+    { "type": "color", "id": "color", "label": "Text color", "default": "#ffffff" }
+  ]
+}
+{% endschema %}

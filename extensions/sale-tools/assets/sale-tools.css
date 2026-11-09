@@ -1,0 +1,11 @@
+.aios-bar {  
+  padding: 10px 16px;
+  text-align: center;
+  font-size: 14px;
+}
+.aios-bar__link {
+  margin-left: 8px;
+  color: inherit;
+  text-decoration: underline;
+  font-weight: 600;
+}

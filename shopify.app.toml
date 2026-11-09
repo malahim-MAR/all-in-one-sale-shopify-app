@@ -2,7 +2,7 @@
 
 client_id = "e2d63a79506d99e8462d4b04b9741215"
 name = "all-in-one-sale"
-application_url = "https://example.com"g
+application_url = "https://example.com"
 embedded = true
 
 [access_scopes]
