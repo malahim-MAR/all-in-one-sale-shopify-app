@@ -4,11 +4,31 @@
 {%- assign cfg = app.metafields['$app'].settings.value -%}
 
 {% if cfg.announcementText != blank %}
-  <div class="aios-bar" style="background: {{ block.settings.bg }}; color: {{ block.settings.color }};">
-    <span>{{ cfg.announcementText | escape }}</span>
+  <div
+    class="aios-bar"
+    data-end="{{ cfg.endDate | escape }}"
+    data-tz="{{ 'now' | date: '%z' }}"
+    style="
+      background: {{ block.settings.bg }};
+      color: {{ block.settings.color }};
+      --aios-bg: {{ block.settings.bg }};
+    "
+  >
+    <span class="aios-bar__msg">{{ cfg.announcementText | escape }}</span>
+
+    {% if cfg.endDate != blank %}
+      <span class="aios-bar__sep"></span>
+      <span class="aios-bar__timer" aria-live="off"></span>
+    {% endif %}
+
     {% if cfg.linkUrl != blank %}
+      <span class="aios-bar__sep"></span>
       <a class="aios-bar__link" href="{{ cfg.linkUrl | escape }}">{{ cfg.linkText | default: 'Shop now' | escape }}</a>
     {% endif %}
+
+    <button class="aios-bar__close" aria-label="Close announcement" onclick="this.closest('.aios-bar').remove()">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="3" x2="11" y2="11"/><line x1="11" y1="3" x2="3" y2="11"/></svg>
+    </button>
   </div>
 {% endif %}
 
@@ -17,8 +37,8 @@
   "name": "Announcement bar",
   "target": "body",
   "settings": [
-    { "type": "color", "id": "bg", "label": "Background", "default": "#111111" },
-    { "type": "color", "id": "color", "label": "Text color", "default": "#ffffff" }
+    { "type": "color", "id": "bg",    "label": "Background",  "default": "#111111" },
+    { "type": "color", "id": "color", "label": "Text color",  "default": "#ffffff" }
   ]
 }
 {% endschema %}

@@ -29,9 +29,19 @@ export const loader = async ({ request }) => {
   const json = await response.json();
 
   const raw = json.data.currentAppInstallation.metafield?.value;
-  const setting = raw
-    ? JSON.parse(raw)
-    : { announcementText: "", linkText: "", linkUrl: "" };
+  const defaults = {
+    announcementText: "",
+    linkText: "",
+    linkUrl: "",
+    endDate: "",
+  };
+  let stored = {};
+  try {
+    stored= raw ? JSON.parse(raw) : {};
+  } catch {
+    stored = {};
+  }
+  const setting = { ...defaults, ...stored };
   return { setting };
 };
 // LOADER ENDED
@@ -44,6 +54,10 @@ export const action = async ({ request }) => {
   ).trim();
   const linkText = String(formData.get("linkText") ?? "").trim();
   const linkUrl = String(formData.get("linkUrl") ?? "").trim();
+  const endDate = String(formData.get("endDate") ?? "").trim();
+  if (endDate && Number.isNaN(new Date(endDate).getTime())) {
+  return { ok: false, error: "Invalid end date" };
+}
 
   if (announcementText.length > 200) {
     return { ok: false, error: "Text must be 200 characters or less" };
@@ -78,7 +92,7 @@ export const action = async ({ request }) => {
   }
 
   // merge: keeps any other fields (timer, popup...) you add later
-  const merged = { ...current, announcementText, linkText, linkUrl };
+  const merged = { ...current, announcementText, linkText, linkUrl,endDate };
 
   const response = await admin.graphql(
     `#graphql
@@ -143,6 +157,20 @@ export default function Settings() {
               placeholder="/collections/all or https://..."
               defaultValue={setting.linkUrl}
             />
+            <s-stack direction="block" gap="small-300">
+              <s-text>Sale end date and time</s-text>
+              <input
+                type="datetime-local"
+                name="endDate"
+                defaultValue={setting.endDate}
+                style={{
+                  padding: "8px",
+                  borderRadius: "8px",
+                  border: "1px solid #8a8a8a",
+                }}
+              />
+              <s-text tone="subdued">Leave empty to hide the countdown.</s-text>
+            </s-stack>
             {actionData?.ok === false && (
               <s-banner tone="critical">{actionData.error}</s-banner>
             )}

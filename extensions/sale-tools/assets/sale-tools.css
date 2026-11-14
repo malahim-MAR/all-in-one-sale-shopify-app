@@ -1,11 +1,158 @@
-.aios-bar {  
-  padding: 10px 16px;
+/* ── Announcement Bar ── */
+
+.aios-bar {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 20px;
+  padding: 11px 24px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  line-height: 1;
   text-align: center;
-  font-size: 14px;
+  overflow: hidden;
+  z-index: 9999;
 }
+
+/* subtle slide-down entrance */
+@keyframes aios-slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+.aios-bar { animation: aios-slideDown 0.4s ease-out both; }
+
+/* message text */
+.aios-bar__msg {
+  display: inline;
+  opacity: 0.92;
+}
+
+/* separator dot */
+.aios-bar__sep {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.35;
+  flex-shrink: 0;
+}
+
+/* CTA link */
 .aios-bar__link {
-  margin-left: 8px;
   color: inherit;
-  text-decoration: underline;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 11px;
+  padding: 5px 14px;
+  border: 1.5px solid currentColor;
+  border-radius: 100px;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+  opacity: 0.95;
+}
+.aios-bar__link:hover {
+  background: currentColor;
+}
+/* invert text on hover — needs a wrapper trick; we rely on a CSS variable */
+.aios-bar__link:hover {
+  /* the bg color is set as --aios-bg on the element via Liquid */
+  color: var(--aios-bg, #111);
+}
+
+/* ── Timer ── */
+
+.aios-bar__timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.aios-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.aios-digits {
+  display: flex;
+  gap: 2px;
+}
+
+.aios-digit {
+  min-width: 20px;
+  padding: 4px 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+}
+
+.aios-colon {
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  opacity: 0.5;
+  align-self: flex-start;
+  padding-top: 4px;
+}
+
+.aios-label {
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.5;
   font-weight: 600;
+}
+
+/* ── Dismiss Button ── */
+
+.aios-bar__close {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.2s;
+  padding: 4px;
+  line-height: 0;
+}
+.aios-bar__close:hover {
+  opacity: 0.85;
+}
+.aios-bar__close svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 600px) {
+  .aios-bar {
+    font-size: 12px;
+    padding: 10px 36px 10px 16px;
+    gap: 6px 12px;
+  }
+  .aios-bar__link {
+    font-size: 10px;
+    padding: 4px 12px;
+  }
+  .aios-digit {
+    min-width: 17px;
+    font-size: 12px;
+    padding: 3px 4px;
+  }
 }
